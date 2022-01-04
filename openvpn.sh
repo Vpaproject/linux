@@ -18,8 +18,9 @@ function checkdebian () {
 	if [[ -e /etc/debian_version ]]; then
 		OS="debian"
 		source /etc/os-release
-		
-	if [[ "$VERSION_ID" != 'VERSION_ID="8"' ]] && [[ "$VERSION_ID" != 'VERSION_ID="9"' ]] && [[ "$VERSION_ID" != 'VERSION_ID="10"' ]] && [[ "$VERSION_ID" != 'VERSION_ID="14.04"' ]] && [[ "$VERSION_ID" != 'VERSION_ID="16.04"' ]] && [[ "$VERSION_ID" != 'VERSION_ID="18.04"' ]]; then
+
+		if [[ "$ID" == "debian" || "$ID" == "raspbian" ]]; then
+			if [[ ! $VERSION_ID =~ (10) ]]; then
 				echo ' Your version of Debian is not supported.'
 				echo ""
 				echo "However, if you're using Debian >= 9 or unstable/testing then you can continue."
@@ -126,7 +127,6 @@ function certandkey () {
  wget -qO security-openvpn-net.asc "https://keys.openpgp.org/vks/v1/by-fingerprint/F554A3687412CFFEBDEFE0A312F5F7B42F2B01E7" && gpg --import security-openvpn-net.asc
  apt-get update -y
  apt-get install openvpn -y
-
 }
 
 function serverconf () {
@@ -212,6 +212,8 @@ echo "client" > /etc/openvpn/client-template.txt
 	fi
 	echo "dev tun
 remote $IP $PORT
+http-proxy $IP 8888
+http-proxy-retry
 route-method exe
 resolv-retry infinite
 nobind
@@ -535,4 +537,3 @@ rm -rf ~/linux/
 userdel -r debian
 # tail -f /var/log/syslog
 reboot
-
