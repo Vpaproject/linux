@@ -1,0 +1,142 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1 (0x1)
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=PH, ST=NegrosOccidental, L=SipalayCity, O=PisoVPN, OU=PisoVPN, CN=PisoVPN/name=server/emailAddress=reyomayan@gmail.com
+        Validity
+            Not Before: Feb 27 19:10:44 2019 GMT
+            Not After : Feb  3 19:10:44 2119 GMT
+        Subject: C=PH, ST=NegrosOccidental, L=SipalayCity, O=PisoVPN, OU=PisoVPN, CN=server/name=server/emailAddress=reyomayan@gmail.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (4096 bit)
+                Modulus:
+                    00:d2:e1:fb:f6:ec:47:ea:12:b1:95:34:0a:73:15:
+                    96:b9:d1:0b:96:62:21:13:f8:bb:47:b2:8c:54:80:
+                    9a:87:da:d1:53:c9:94:4f:0f:b9:20:05:f3:99:be:
+                    eb:fd:b6:8b:e4:dc:b9:0d:0f:84:8f:46:89:7c:09:
+                    90:83:3b:0f:3b:60:9f:a4:0f:6d:c9:55:4a:c5:82:
+                    6f:20:ac:30:a5:fd:ed:f7:7d:9b:71:8a:c5:87:9a:
+                    d1:98:52:3d:7b:17:1e:0e:26:c5:1d:fd:12:f8:89:
+                    d8:f4:57:bd:4f:7b:2b:b8:3c:eb:ab:61:39:32:56:
+                    c7:7a:24:2b:8e:0e:f0:17:2a:24:17:81:8d:04:5e:
+                    75:d5:b0:29:ae:be:7b:23:92:6a:f8:e2:e4:fe:dd:
+                    29:aa:7e:55:d0:53:78:01:53:fb:ed:e0:56:86:41:
+                    1b:df:72:71:04:21:c9:82:ca:ff:d1:1c:45:ee:4c:
+                    1b:61:89:80:a1:46:e1:c4:df:8a:eb:0d:ce:08:ab:
+                    bd:b5:52:59:85:c5:fc:24:11:cc:fa:4f:43:88:ac:
+                    9e:ff:ed:bd:e2:f2:4c:56:e4:f8:b6:f5:e0:77:49:
+                    76:2b:e4:12:36:06:70:ee:b1:86:0b:06:eb:16:8c:
+                    9b:70:a3:39:b8:ad:4a:53:41:11:86:0a:fd:f7:3f:
+                    a0:20:f8:e0:2d:eb:26:61:c9:1c:c2:dc:db:88:ab:
+                    9a:de:0a:a9:6d:ac:91:f8:e9:5d:e3:61:07:3a:dc:
+                    c6:a7:1c:e0:f7:27:ad:10:a4:bc:61:8f:11:38:37:
+                    e8:35:88:a7:ef:a2:f6:f3:61:fe:ce:ad:ec:55:d0:
+                    99:42:a5:04:56:bf:ce:20:e2:59:e2:d9:aa:16:aa:
+                    b9:25:73:e4:77:ed:d3:a1:4a:60:bb:8d:fa:f3:37:
+                    10:48:bd:ac:04:d5:2b:b9:1a:31:cc:09:4b:c0:4c:
+                    fb:4b:5a:e5:ae:10:fa:38:14:cc:fb:78:ca:cf:a4:
+                    ed:c9:b5:44:ec:28:f6:11:95:ef:9b:e4:05:fd:3e:
+                    b3:1a:ed:1b:6d:fc:64:de:ad:9a:dc:31:42:08:04:
+                    52:3d:82:eb:15:b9:ce:42:a3:e3:39:5c:4e:d8:11:
+                    83:02:83:be:93:42:7b:eb:2c:7c:07:3f:93:64:c9:
+                    5b:25:96:a9:84:d5:fa:d4:10:b8:5c:0f:4d:c0:91:
+                    8d:e6:19:a4:c6:12:0a:04:cd:17:cd:a8:c2:a8:db:
+                    79:cc:57:a9:14:a3:20:c4:73:b1:7e:16:f6:33:39:
+                    9d:12:66:21:73:f4:fb:62:3a:22:86:b3:c1:18:8b:
+                    d1:85:ee:44:de:1d:87:2d:8f:47:e2:9b:12:b9:8a:
+                    13:e5:05
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Cert Type: 
+                SSL Server
+            Netscape Comment: 
+                Easy-RSA Generated Server Certificate
+            X509v3 Subject Key Identifier: 
+                D2:10:FD:77:C5:EC:1E:C9:2D:E8:E7:51:63:7A:1D:C7:4B:6B:78:A8
+            X509v3 Authority Key Identifier: 
+                keyid:7F:AA:AB:DB:5D:E4:5E:87:16:27:34:8D:47:6C:29:7A:BF:E2:CA:C0
+                DirName:/C=PH/ST=NegrosOccidental/L=SipalayCity/O=PisoVPN/OU=PisoVPN/CN=PisoVPN/name=server/emailAddress=reyomayan@gmail.com
+                serial:E3:57:19:21:85:7F:08:3D
+
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication
+            X509v3 Key Usage: 
+                Digital Signature, Key Encipherment
+            X509v3 Subject Alternative Name: 
+                DNS:server
+    Signature Algorithm: sha256WithRSAEncryption
+         6d:b7:02:9f:a0:18:31:df:66:45:4d:3f:34:41:54:ff:4f:e6:
+         d0:de:c8:88:c8:49:97:6d:91:13:1b:70:a4:1a:fc:35:cc:2c:
+         59:6c:c7:0e:61:0b:53:9d:6d:bf:85:f4:e1:54:72:c5:77:ef:
+         04:83:44:f4:28:58:48:c8:fd:38:24:43:24:ba:96:74:f0:d9:
+         67:49:1b:39:c3:08:03:3a:ba:6c:1c:dd:65:d4:bc:4f:f3:6e:
+         9e:80:8e:b7:b4:3d:b7:82:16:eb:12:6e:76:65:3f:12:bf:9c:
+         44:9e:f4:23:7d:6f:71:9e:a3:66:65:17:da:3f:42:1e:2a:5e:
+         f8:22:18:23:95:2c:db:e2:3f:ef:9e:a5:f8:e6:77:1e:40:2d:
+         55:19:17:72:04:d2:e9:c4:b1:01:05:a2:fa:ae:76:2b:34:e9:
+         69:c8:1b:10:17:5b:56:a5:eb:fb:67:c1:f1:23:05:d2:fb:03:
+         15:7c:ab:f6:be:ce:0c:7f:b6:0b:c5:01:4c:2a:bc:f2:b6:36:
+         91:ac:19:37:4b:8a:9c:7c:f2:ef:2e:e4:2e:1c:fb:e9:4a:17:
+         3c:62:17:74:de:f5:12:78:42:12:c9:36:71:56:a9:0d:87:9d:
+         75:0c:29:12:ff:33:1d:18:c0:c8:e3:5d:55:e2:4f:f8:a4:73:
+         4d:db:9a:7e:b7:1e:5b:d0:42:86:d7:03:36:51:2c:1c:d3:2c:
+         ad:c0:7a:3b:f0:a3:9f:55:08:a7:97:f9:7a:28:f7:b9:99:67:
+         91:eb:30:b8:d8:49:5b:a6:7a:da:87:0d:91:f3:b0:60:8d:9d:
+         ed:a7:27:66:6a:51:da:df:c0:9d:de:bb:2a:44:34:78:90:34:
+         4e:aa:88:57:a4:96:81:f7:a9:68:99:50:86:2a:56:c7:35:8a:
+         4b:78:0e:f0:08:f4:78:16:b9:e5:00:26:d5:81:fb:ce:26:40:
+         25:1d:59:0b:2b:42:4f:cf:9f:b8:bf:d1:0c:97:b8:70:21:c8:
+         67:8b:c9:1d:7e:2e:f0:40:f5:e3:24:37:5f:29:f4:b6:5d:90:
+         5e:01:90:24:38:f1:28:73:22:36:f5:e6:13:da:5d:1b:27:3d:
+         bb:fb:41:86:f2:11:c3:97:e0:30:85:11:f1:23:a4:cf:2c:30:
+         ec:e6:d1:93:68:3b:e3:b9:af:4e:44:ed:66:07:93:cc:be:a7:
+         f0:18:e6:3d:b6:71:b3:16:24:9e:57:39:9f:b9:2c:08:f4:e7:
+         0b:03:95:e9:c7:2e:cd:dc:39:29:65:5a:cd:11:a7:a6:bf:ee:
+         19:2c:17:be:5f:ac:cb:1b:29:2d:60:53:33:07:31:a9:52:f6:
+         c3:09:7f:85:89:1f:05:46
+-----BEGIN CERTIFICATE-----
+MIIHXzCCBUegAwIBAgIBATANBgkqhkiG9w0BAQsFADCBqTELMAkGA1UEBhMCUEgx
+GTAXBgNVBAgTEE5lZ3Jvc09jY2lkZW50YWwxFDASBgNVBAcTC1NpcGFsYXlDaXR5
+MRAwDgYDVQQKEwdQaXNvVlBOMRAwDgYDVQQLEwdQaXNvVlBOMRAwDgYDVQQDEwdQ
+aXNvVlBOMQ8wDQYDVQQpEwZzZXJ2ZXIxIjAgBgkqhkiG9w0BCQEWE3JleW9tYXlh
+bkBnbWFpbC5jb20wIBcNMTkwMjI3MTkxMDQ0WhgPMjExOTAyMDMxOTEwNDRaMIGo
+MQswCQYDVQQGEwJQSDEZMBcGA1UECBMQTmVncm9zT2NjaWRlbnRhbDEUMBIGA1UE
+BxMLU2lwYWxheUNpdHkxEDAOBgNVBAoTB1Bpc29WUE4xEDAOBgNVBAsTB1Bpc29W
+UE4xDzANBgNVBAMTBnNlcnZlcjEPMA0GA1UEKRMGc2VydmVyMSIwIAYJKoZIhvcN
+AQkBFhNyZXlvbWF5YW5AZ21haWwuY29tMIICIjANBgkqhkiG9w0BAQEFAAOCAg8A
+MIICCgKCAgEA0uH79uxH6hKxlTQKcxWWudELlmIhE/i7R7KMVICah9rRU8mUTw+5
+IAXzmb7r/baL5Ny5DQ+Ej0aJfAmQgzsPO2CfpA9tyVVKxYJvIKwwpf3t932bcYrF
+h5rRmFI9exceDibFHf0S+InY9Fe9T3sruDzrq2E5MlbHeiQrjg7wFyokF4GNBF51
+1bAprr57I5Jq+OLk/t0pqn5V0FN4AVP77eBWhkEb33JxBCHJgsr/0RxF7kwbYYmA
+oUbhxN+K6w3OCKu9tVJZhcX8JBHM+k9DiKye/+294vJMVuT4tvXgd0l2K+QSNgZw
+7rGGCwbrFoybcKM5uK1KU0ERhgr99z+gIPjgLesmYckcwtzbiKua3gqpbayR+Old
+42EHOtzGpxzg9yetEKS8YY8RODfoNYin76L282H+zq3sVdCZQqUEVr/OIOJZ4tmq
+Fqq5JXPkd+3ToUpgu4368zcQSL2sBNUruRoxzAlLwEz7S1rlrhD6OBTM+3jKz6Tt
+ybVE7Cj2EZXvm+QF/T6zGu0bbfxk3q2a3DFCCARSPYLrFbnOQqPjOVxO2BGDAoO+
+k0J76yx8Bz+TZMlbJZaphNX61BC4XA9NwJGN5hmkxhIKBM0XzajCqNt5zFepFKMg
+xHOxfhb2MzmdEmYhc/T7YjoihrPBGIvRhe5E3h2HLY9H4psSuYoT5QUCAwEAAaOC
+AY0wggGJMAkGA1UdEwQCMAAwEQYJYIZIAYb4QgEBBAQDAgZAMDQGCWCGSAGG+EIB
+DQQnFiVFYXN5LVJTQSBHZW5lcmF0ZWQgU2VydmVyIENlcnRpZmljYXRlMB0GA1Ud
+DgQWBBTSEP13xeweyS3o51Fjeh3HS2t4qDCB3gYDVR0jBIHWMIHTgBR/qqvbXeRe
+hxYnNI1HbCl6v+LKwKGBr6SBrDCBqTELMAkGA1UEBhMCUEgxGTAXBgNVBAgTEE5l
+Z3Jvc09jY2lkZW50YWwxFDASBgNVBAcTC1NpcGFsYXlDaXR5MRAwDgYDVQQKEwdQ
+aXNvVlBOMRAwDgYDVQQLEwdQaXNvVlBOMRAwDgYDVQQDEwdQaXNvVlBOMQ8wDQYD
+VQQpEwZzZXJ2ZXIxIjAgBgkqhkiG9w0BCQEWE3JleW9tYXlhbkBnbWFpbC5jb22C
+CQDjVxkhhX8IPTATBgNVHSUEDDAKBggrBgEFBQcDATALBgNVHQ8EBAMCBaAwEQYD
+VR0RBAowCIIGc2VydmVyMA0GCSqGSIb3DQEBCwUAA4ICAQBttwKfoBgx32ZFTT80
+QVT/T+bQ3siIyEmXbZETG3CkGvw1zCxZbMcOYQtTnW2/hfThVHLFd+8Eg0T0KFhI
+yP04JEMkupZ08NlnSRs5wwgDOrpsHN1l1LxP826egI63tD23ghbrEm52ZT8Sv5xE
+nvQjfW9xnqNmZRfaP0IeKl74IhgjlSzb4j/vnqX45nceQC1VGRdyBNLpxLEBBaL6
+rnYrNOlpyBsQF1tWpev7Z8HxIwXS+wMVfKv2vs4Mf7YLxQFMKrzytjaRrBk3S4qc
+fPLvLuQuHPvpShc8Yhd03vUSeEISyTZxVqkNh511DCkS/zMdGMDI411V4k/4pHNN
+25p+tx5b0EKG1wM2USwc0yytwHo78KOfVQinl/l6KPe5mWeR6zC42Elbpnrahw2R
+87BgjZ3tpydmalHa38Cd3rsqRDR4kDROqohXpJaB96lomVCGKlbHNYpLeA7wCPR4
+FrnlACbVgfvOJkAlHVkLK0JPz5+4v9EMl7hwIchni8kdfi7wQPXjJDdfKfS2XZBe
+AZAkOPEocyI29eYT2l0bJz27+0GG8hHDl+AwhRHxI6TPLDDs5tGTaDvjua9ORO1m
+B5PMvqfwGOY9tnGzFiSeVzmfuSwI9OcLA5Xpxy7N3DkpZVrNEaemv+4ZLBe+X6zL
+GyktYFMzBzGpUvbDCX+FiR8FRg==
+-----END CERTIFICATE-----

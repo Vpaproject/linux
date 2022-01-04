@@ -1,0 +1,6 @@
+set_var EASYRSA_REQ_COUNTRY    "PH"
+set_var EASYRSA_REQ_PROVINCE   "PisoVPN"
+set_var EASYRSA_REQ_CITY       "PisoVPN"
+set_var EASYRSA_REQ_ORG        "PisoVPN"
+set_var EASYRSA_REQ_EMAIL      "support@pisovpn.com"
+set_var EASYRSA_REQ_OU         "PisoVPN"
