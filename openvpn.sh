@@ -255,7 +255,7 @@ fi
  systemctl enable openvpn@server_udp
  systemctl restart openvpn@server_tcp
  systemctl restart openvpn@server_udp
-}
+
 
 function clientovpn () {
 echo "client" > /etc/openvpn/client-template.txt
@@ -265,6 +265,9 @@ echo "client" > /etc/openvpn/client-template.txt
 		echo "proto tcp" >> /etc/openvpn/client-template.txt
 	fi
 	echo "dev tun
+client
+proto tcp
+dev tun
 remote $IP $PORT
 http-proxy $IP 8888
 http-proxy-retry
