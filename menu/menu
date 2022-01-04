@@ -1,0 +1,11 @@
+#!/bin/bash
+clear
+
+echo -e ""
+echo -e " PisoVPN "
+echo -e ""
+echo -e " Commands:"
+echo -e "  accounts"
+echo -e "  options"
+echo -e "  server"
+echo -e ""

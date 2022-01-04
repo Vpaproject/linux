@@ -1,0 +1,27 @@
+#!/bin/bash
+
+clear
+echo -e ""
+echo -e " PisoVPN " | lolcat -a
+echo -e ""
+read -p " Username: " User
+echo -e ""
+sleep 2
+egrep "^$User" /etc/passwd &> /dev/null
+if [ $? -eq 0 ]; then
+	userdel -f $User
+  rm -rf /home/$User
+	clear
+	echo -e ""
+  echo -e " PisoVPN " | lolcat -a
+  echo -e ""
+	echo -e " User Deleted"
+	echo -e ""
+else
+	clear
+	echo -e ""
+  echo -e " PisoVPN " | lolcat -a
+  echo -e ""
+	echo -e " User you entered does not exist"
+	echo -e ""
+fi

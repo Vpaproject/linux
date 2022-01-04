@@ -1,0 +1,45 @@
+#!/bin/bash
+
+clear
+
+echo -e ""
+echo -e " PisoVPN "
+echo -e " Create Random Users"
+read -p "  No. of Users to be created: " No_User
+read -p "  Active Days of Users: " Days
+echo -e ""
+echo -e ""
+sleep 1
+clear
+MYIP=$(wget -qO- ipv4.icanhazip.com)
+Today="$(date +"%Y-%m-%d")"
+Expire_On=$(date -d "$Days days" +"%Y-%m-%d")
+opensshport="$(netstat -ntlp | grep -i ssh | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2 | xargs | sed -e 's/ /, /g' )"
+dropbearport="$(netstat -nlpt | grep -i dropbear | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2 | xargs | sed -e 's/ /, /g')"
+stunnel4port="$(netstat -nlpt | grep -i stunnel | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2 | xargs | sed -e 's/ /, /g')"
+openvpnport="$(netstat -nlpt | grep -i openvpn | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2 | xargs | sed -e 's/ /, /g')"
+squidport="$(cat /etc/privoxy/config | grep -i listen-address | awk '{print $2}' | xargs | sed -e 's/ /, /g')"
+
+echo -e ""
+echo -e " PisoVPN "
+echo -e ""
+echo -e " Create Random Accounts"
+for (( i=1; i <= $No_User; i++ ))
+do
+	USER=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`
+	useradd -M -N -s /bin/false -e $Expire_On $USER &> /dev/null
+	PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
+	echo $USER:$USER | chpasswd &> /dev/null
+	echo -e " Username: "$USER
+  echo -e " Password: "$USER
+ echo -e ""
+done
+echo -e " Account Info: "
+echo -e " Host/IP: "$MYIP
+echo -e " OpenSSH Port: "$opensshport
+echo -e " Dropbear Port: "$dropbearport
+echo -e " SSL Port: "$stunnel4port
+echo -e " Proxy Ports: "$squidport
+echo -e " OpenVPN Port: "$openvpnport
+echo -e ""
+echo -e ""

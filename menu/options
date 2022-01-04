@@ -1,0 +1,42 @@
+#!/bin/bash
+
+clear
+echo -e ""
+echo -e " PisoVPN "
+echo -e ""
+echo -e "   [1] MultiLogin"
+echo -e "   [2] Restart Services"
+echo -e "   [3] Change Ports"
+echo -e "   [4] Reboot"
+echo -e "   [5] Exit"
+echo -e ""
+read -p "   Select from options [1-5]: " Options
+echo -e ""
+sleep 3
+clear
+case $Options in
+		1)
+		clear
+		set_multilogin_autokill
+		exit
+		;;
+		2)
+		clear
+		restart_services
+		exit
+		;;
+		3)
+		clear
+		edit_ports
+		exit
+		;;
+		4)
+		clear
+		reboot_sys
+		exit
+		;;
+		5)
+		clear
+		exit
+		;;
+	esac

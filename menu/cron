@@ -1,0 +1,6 @@
+#!/bin/bash
+# Registration Daily Cron
+
+rm -rf daily_user_limit.txt
+wait
+echo -n "----------" >> daily_user_limit.txt

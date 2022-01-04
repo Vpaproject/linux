@@ -1,0 +1,17 @@
+#!/bin/bash
+
+opensshport="$(netstat -ntlp | grep -i ssh | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
+dropbearport="$(netstat -nlpt | grep -i dropbear | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
+stunnel4port="$(netstat -nlpt | grep -i stunnel | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
+openvpnport="$(netstat -nlpt | grep -i openvpn | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
+squidport="$(cat /etc/privoxy/config | grep -i listen-address | awk '{print $2}')"
+clear
+echo -e ""
+echo -e " PisoVPN "
+echo -e ""
+echo -e " OpenSSH Port: "$opensshport
+echo -e " Dropbear Port: "$dropbearport
+echo -e " SSL Port: "$stunnel4port
+echo -e " Squid Ports: "$squidport
+echo -e " OpenVPN Port: "$openvpnport
+echo -e ""

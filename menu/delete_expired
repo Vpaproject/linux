@@ -1,0 +1,17 @@
+#!/bin/bash
+datenow=$(date +%s)
+for user in $(awk -F: '{print $1}' /etc/passwd); do
+expdate=$(chage -l $user|awk -F: '/Account expires/{print $2}')
+echo $expdate|grep -q never && continue
+echo -n "User \`$user' expires on $expdate ... "
+expsec=$(date +%s --date="$expdate")
+diff=$(echo $datenow - $expsec|bc -l)
+echo $diff|grep -q ^\- && echo okay && continue
+# got this far, account must have expired
+userdel -r $user  &> /dev/null
+done
+echo -e ""
+echo -e " PisoVPN "
+echo -e ""
+echo -e "  All Expired Users Has Been Deleted"
+echo -e ""

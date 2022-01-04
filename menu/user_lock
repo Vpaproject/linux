@@ -1,0 +1,41 @@
+#!/bin/bash
+
+clear
+echo -e ""
+echo -e " PisoVPN " | lolcat -a
+echo -e ""
+read -p " Username: " User
+egrep "^$User" /etc/passwd >/dev/null
+if [ $? -eq 0 ]; then
+sleep 1
+if grep -Fxq "$User" /etc/Locked_List.txt
+then
+  clear
+echo -e ""
+echo -e " PisoVPN " | lolcat -a
+echo -e ""
+echo -e " User Has Been Locked Already"
+echo -e ""
+exit
+else
+  clear
+echo -e ""
+echo -e " PisoVPN " | lolcat -a
+echo -e ""
+echo -e " User Has Been Locked               "
+echo -e " User Has Been Added To Locked_List"
+echo -e ""
+echo $User >> /etc/Locked_List.txt
+passwd -l $User
+fi
+
+else
+	clear
+	echo -e ""
+echo -e " PisoVPN " | lolcat -a
+  echo -e ""
+	echo -e " Username Doesnt Exist"
+	echo -e ""
+	exit
+    exit 1
+fi
