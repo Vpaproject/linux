@@ -16,13 +16,10 @@ function checktuntap () {
 
 function checkdebian () {
 	if [[ -e /etc/debian_version ]]; then
-	OS=debian
-	VERSION_ID=$(cat /etc/os-release | grep "VERSION_ID")
-	GROUPNAME=nogroup
-	RCLOCAL='/etc/rc.local'
-
+		OS="debian"
+		source /etc/os-release
+		
 	if [[ "$VERSION_ID" != 'VERSION_ID="8"' ]] && [[ "$VERSION_ID" != 'VERSION_ID="9"' ]] && [[ "$VERSION_ID" != 'VERSION_ID="10"' ]] && [[ "$VERSION_ID" != 'VERSION_ID="14.04"' ]] && [[ "$VERSION_ID" != 'VERSION_ID="16.04"' ]] && [[ "$VERSION_ID" != 'VERSION_ID="18.04"' ]]; then
-echo ""
 				echo ' Your version of Debian is not supported.'
 				echo ""
 				echo "However, if you're using Debian >= 9 or unstable/testing then you can continue."
