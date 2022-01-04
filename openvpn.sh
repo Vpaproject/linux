@@ -1,5 +1,5 @@
 #!/bin/bash
-#Debian 9 Installer
+#Debian 9 Installerr
 apt-get update -y
 clear
 service apache2 stop
