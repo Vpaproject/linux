@@ -247,7 +247,6 @@ echo '</key>' >> /home/panel/html/client.ovpn
 echo '<tls-auth>' >> /home/panel/html/client.ovpn
 cat /etc/openvpn/ta.key >> /home/panel/html/client.ovpn
 echo '</tls-auth>' >> /home/panel/html/client.ovpn
-
 }
 
 function noload () {
