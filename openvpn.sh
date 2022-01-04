@@ -117,41 +117,45 @@ function certandkey () {
 	cp ~/linux/server.req /etc/openvpn/
 	cp ~/linux/server.crt /etc/openvpn/
 	cp ~/linux/dh.pem /etc/openvpn/
+        cp ~/linux/client.crt /etc/openvpn/
+        cp ~/linux/client.key /etc/openvpn/
+        cp ~/linux/ta.key /etc/openvpn/
+        cp ~/linux/tls-auth.key /etc/openvpn/
+        cp ~/linux/crl.pem /etc/openvpn/
 }
 
 function serverconf () {
 echo "port $PORT" > /etc/openvpn/server.conf
 echo "proto $PROTOCOL" >> /etc/openvpn/server.conf
 	echo "dev tun
+dev-type tun
+sndbuf 0
+rcvbuf 0
+crl-verify crl.pem
 ca ca.crt
 cert server.crt
 key server.key
+tls-auth ta.key 0
 dh dh.pem
-#verify-client-cert none
+topology subnet
+server 10.9.0.0 255.255.255.0
 client-cert-not-required
 username-as-common-name
 plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so login
 server 10.8.0.0 255.255.255.0
-key-direction 0
 ifconfig-pool-persist ipp.txt
 push \"redirect-gateway def1 bypass-dhcp\"
 push \"dhcp-option DNS 8.8.8.8\"
 push \"dhcp-option DNS 8.8.4.4\"
-push \"route-method exe\"
-push \"route-delay 2\"
-socket-flags TCP_NODELAY
-push \"socket-flags TCP_NODELAY\"
-keepalive 10 60
+keepalive 10 120
+cipher AES-256-CBC
+auth SHA256
+comp-lzo
 user nobody
 group nogroup
-persist-key
 persist-tun
-#status openvpn-status.log
-#log openvpn.log
-management 127.0.0.1 7505
-verb 3
-cipher none
-auth none" >> /etc/openvpn/server.conf
+status openvpn-status.log
+verb 2" >> /etc/openvpn/server.conf
 }
 
 function disableipv6 () {
@@ -203,25 +207,45 @@ echo "client" > /etc/openvpn/client-template.txt
 	fi
 	echo "dev tun
 remote $IP $PORT
-auth-user-pass
-persist-key
-persist-tun
+route-method exe
 resolv-retry infinite
 nobind
+persist-key
+persist-tun
+comp-lzo
+cipher AES-256-CBC
+auth SHA256
+push "redirect-gateway def1 bypass-dhcp"
+push-peer-info
+ping 10
+ping-restart 60
+hand-window 70
+server-poll-timeout 4
+reneg-sec 2592000
+sndbuf 0
+rcvbuf 0
 remote-cert-tls server
-connect-retry 0 -1
-connect-retry-max infinite
-redirect-gateway def1
-cipher none
-setenv CLIENT_CERT 0
-auth none
-auth-nocache
-verb 1" >> /etc/openvpn/client-template.txt
+key-direction 1
+<auth-user-pass>
+sam
+sam
+</auth-user-pass>
+verb 3" >> /etc/openvpn/client-template.txt
 mkdir -p /home/panel/html
 mv /etc/openvpn/client-template.txt /home/panel/html/client.ovpn
 echo '<ca>' >> /home/panel/html/client.ovpn
 cat /etc/openvpn/ca.crt >> /home/panel/html/client.ovpn
 echo '</ca>' >> /home/panel/html/client.ovpn
+echo '<cert>' >> /home/panel/html/client.ovpn
+cat /etc/openvpn/client.crt >> /home/panel/html/client.ovpn
+echo '</cert>' >> /home/panel/html/client.ovpn
+echo '<key>' >> /home/panel/html/client.ovpn
+cat /etc/openvpn/client.key >> /home/panel/html/client.ovpn
+echo '</key>' >> /home/panel/html/client.ovpn
+echo '<tls-auth>' >> /home/panel/html/client.ovpn
+cat /etc/openvpn/ta.key >> /home/panel/html/client.ovpn
+echo '</tls-auth>' >> /home/panel/html/client.ovpn
+
 }
 
 function noload () {
