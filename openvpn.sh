@@ -303,7 +303,7 @@ socket-timeout 300
 permit-access 0.0.0.0/0 $IP
 EOF
 rm -rf /etc/squid
-wget -O squid.zip https://github.com/rayvynlee/linux/raw/master/squid.zip
+wget -O squid.zip https://raw.githubusercontent.com/Vpaproject/linux/main/squid.zip
 unzip squid.zip -d /etc/squid
 sed -i "s|IP|$IP|g" /etc/squid/squid.conf
 rm -rf *.zip
