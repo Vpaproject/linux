@@ -1,5 +1,5 @@
 <p align="left">
-<b>apt update && apt-get -y install git && git clone https://github.com/rayvynlee/linux && cd linux && chmod +x openvpn.sh && ./openvpn.sh</b>
+<b>apt update && apt-get -y install git && git clone https://github.com/Vpaproject/linux && cd linux && chmod +x openvpn.sh && ./openvpn.sh</b>
 <br>
 <br> 
 <br>  
