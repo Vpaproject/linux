@@ -1,0 +1,642 @@
+#!/bin/bash
+
+# Script name
+MyScriptName='KinGmapua'
+SSH_Banner='https://raw.githubusercontent.com/itsgelogomayee/dpndncy/master/banner'
+OpenVPN_Port1='1103'
+OpenVPN_Port2='25222'
+OvpnDownload_Port='81'
+# Server local time
+MyVPS_Time='Asia/Kuala_Lumpur'
+#############################
+
+function InstUpdates(){
+ export DEBIAN_FRONTEND=noninteractive
+ apt-get update
+ apt-get upgrade -y
+ apt-get install nano wget curl zip unzip tar gzip p7zip-full bc rc openssl cron net-tools dnsutils dos2unix screen bzip2 ccrypt -y
+# apt-get install dropbear stunnel4 privoxy ca-certificates nginx ruby apt-transport-https lsb-release squid screenfetch -y
+ apt-get install nginx ruby apt-transport-https lsb-release squid screenfetch -y
+# apt-get install perl libnet-ssleay-perl openssl libauthen-pam-perl libpam-runtime libio-pty-perl apt-show-versions python dbus libxml-parser-perl -y
+# apt-get install shared-mime-info jq -y
+ gem install lolcat
+ apt-get autoremove -y
+
+ # Installing OpenVPN by pulling its repository inside sources.list file 
+ #rm -rf /etc/apt/sources.list.d/openvpn*
+ echo "deb http://build.openvpn.net/debian/openvpn/stable $(lsb_release -sc) main" >/etc/apt/sources.list.d/openvpn.list && apt-key del E158C569 && wget -O - https://swupdate.openvpn.net/repos/repo-public.gpg | apt-key add -
+ wget -qO security-openvpn-net.asc "https://keys.openpgp.org/vks/v1/by-fingerprint/F554A3687412CFFEBDEFE0A312F5F7B42F2B01E7" && gpg --import security-openvpn-net.asc
+ apt-get update -y
+ apt-get install openvpn -y
+
+ # Checking if openvpn folder is accidentally deleted or purged
+ if [[ ! -e /etc/openvpn ]]; then
+  mkdir -p /etc/openvpn
+ fi
+
+ # Removing all existing openvpn server files
+ rm -rf /etc/openvpn/*
+
+ # Creating server.conf, ca.crt, server.crt and server.key
+ cat <<'myOpenVPNconf1' > /etc/openvpn/server_tcp.conf
+# LODIxyrussScript
+port MyOvpnPort1
+proto tcp
+dev tun
+dev-type tun
+sndbuf 0
+rcvbuf 0
+crl-verify crl.pem
+ca ca.crt
+cert server.crt
+key server.key
+tls-auth ta.key 0
+dh dh.pem
+topology subnet
+server 10.9.0.0 255.255.255.0
+ifconfig-pool-persist ipp.txt
+push "redirect-gateway def1 bypass-dhcp"
+push "dhcp-option DNS 8.8.8.8"
+push "dhcp-option DNS 8.8.4.4"
+keepalive 10 120
+cipher AES-256-CBC
+auth SHA256
+comp-lzo
+user nobody
+group nogroup
+persist-tun
+status openvpn-status.log
+verb 2
+mute 3
+plugin /etc/openvpn/openvpn-auth-pam.so /etc/pam.d/login
+verify-client-cert none
+username-as-common-name
+myOpenVPNconf1
+cat <<'myOpenVPNconf2' > /etc/openvpn/server_udp.conf
+# LODIxyrussScript
+port MyOvpnPort2
+proto udp
+dev tun
+user nobody
+group nogroup
+persist-key
+persist-tun
+keepalive 10 120
+topology subnet
+server 10.8.0.0 255.255.255.0
+ifconfig-pool-persist ipp.txt
+push "dhcp-option DNS 1.0.0.1"
+push "dhcp-option DNS 1.1.1.1"
+push "redirect-gateway def1 bypass-dhcp" 
+crl-verify crl.pem
+ca ca.crt
+cert server.crt
+key server.key
+tls-auth tls-auth.key 0
+dh dh.pem
+auth SHA256
+cipher AES-128-CBC
+tls-server
+tls-version-min 1.2
+tls-cipher TLS-DHE-RSA-WITH-AES-128-GCM-SHA256
+status openvpn.log
+verb 3
+plugin /etc/openvpn/openvpn-auth-pam.so /etc/pam.d/login
+verify-client-cert none
+username-as-common-name
+myOpenVPNconf2
+	cp ~/linux/ca.crt /etc/openvpn/
+	cp ~/linux/server.key /etc/openvpn/
+	cp ~/linux/server.req /etc/openvpn/
+	cp ~/linux/server.crt /etc/openvpn/
+	cp ~/linux/dh.pem /etc/openvpn/
+        cp ~/linux/client.crt /etc/openvpn/
+        cp ~/linux/client.key /etc/openvpn/
+        cp ~/linux/ta.key /etc/openvpn/
+        cp ~/linux/tls-auth.key /etc/openvpn/
+        cp ~/linux/crl.pem /etc/openvpn/
+
+ # setting openvpn server port
+ sed -i "s|MyOvpnPort1|$OpenVPN_Port1|g" /etc/openvpn/server_tcp.conf
+ sed -i "s|MyOvpnPort2|$OpenVPN_Port2|g" /etc/openvpn/server_udp.conf
+
+ # Getting some OpenVPN plugins for unix authentication
+ wget -qO /etc/openvpn/b.zip 'https://raw.githubusercontent.com/Bonveio/BonvScripts/master/openvpn_plugin64'
+ unzip -qq /etc/openvpn/b.zip -d /etc/openvpn
+ rm -f /etc/openvpn/b.zip
+ 
+ # Some workaround for OpenVZ machines for "Startup error" openvpn service
+ if [[ "$(hostnamectl | grep -i Virtualization | awk '{print $2}' | head -n1)" == 'openvz' ]]; then
+ sed -i 's|LimitNPROC|#LimitNPROC|g' /lib/systemd/system/openvpn*
+ systemctl daemon-reload
+fi
+
+ # Allow IPv4 Forwarding
+ echo 'net.ipv4.ip_forward=1' > /etc/sysctl.d/20-openvpn.conf && sysctl --system &> /dev/null && echo 1 > /proc/sys/net/ipv4/ip_forward
+
+ # Installing Firewalld
+ apt install firewalld -y
+ systemctl start firewalld
+ systemctl enable firewalld
+ firewall-cmd --quiet --set-default-zone=public
+ firewall-cmd --quiet --zone=public --permanent --add-port=1-65534/tcp
+ firewall-cmd --quiet --zone=public --permanent --add-port=1-65534/udp
+ firewall-cmd --quiet --reload
+ firewall-cmd --quiet --add-masquerade
+ firewall-cmd --quiet --permanent --add-masquerade
+ firewall-cmd --quiet --permanent --add-service=ssh
+ firewall-cmd --quiet --permanent --add-service=openvpn
+ firewall-cmd --quiet --permanent --add-service=http
+ firewall-cmd --quiet --permanent --add-service=https
+ firewall-cmd --quiet --permanent --add-service=privoxy
+ firewall-cmd --quiet --permanent --add-service=squid
+ firewall-cmd --quiet --reload
+ 
+ # Enabling IPv4 Forwarding
+ echo 1 > /proc/sys/net/ipv4/ip_forward
+ 
+ # Starting OpenVPN server
+ systemctl start openvpn@server_tcp
+ systemctl start openvpn@server_udp
+ systemctl enable openvpn@server_tcp
+ systemctl enable openvpn@server_udp
+ systemctl restart openvpn@server_tcp
+ systemctl restart openvpn@server_udp
+ 
+ # I'm setting Some Squid workarounds to prevent Privoxy's overflowing file descriptors that causing 50X error when clients trying to connect to your proxy server(thanks for this trick @homer_simpsons)
+ apt remove --purge squid -y
+ rm -rf /etc/squid/sq*
+ apt install squid -y
+ 
+# Squid Ports (must be 1024 or higher)
+ Proxy_Port='8000'
+ cat <<mySquid > /etc/squid/squid.conf
+acl VPN dst $(wget -4qO- http://ipinfo.io/ip)/32
+http_access allow VPN
+http_access deny all 
+http_port 0.0.0.0:$Proxy_Port
+coredump_dir /var/spool/squid
+dns_nameservers 1.1.1.1 1.0.0.1
+refresh_pattern ^ftp: 1440 20% 10080
+refresh_pattern ^gopher: 1440 0% 1440
+refresh_pattern -i (/cgi-bin/|\?) 0 0% 0
+refresh_pattern . 0 20% 4320
+visible_hostname localhost
+mySquid
+
+ sed -i "s|SquidCacheHelper|$Privoxy_Port1|g" /etc/squid/squid.conf
+
+ # Starting Proxy server
+ echo -e "Restarting proxy server.."
+ systemctl restart squid
+}
+
+ function OvpnConfigs(){
+ # Creating nginx config for our ovpn config downloads webserver
+ cat <<'myNginxC' > /etc/nginx/conf.d/bonveio-ovpn-config.conf
+# My OpenVPN Config Download Directory
+server {
+ listen 0.0.0.0:myNginx;
+ server_name localhost;
+ root /var/www/openvpn;
+ index index.html;
+}
+myNginxC
+
+ # Setting our nginx config port for .ovpn download site
+ sed -i "s|myNginx|$OvpnDownload_Port|g" /etc/nginx/conf.d/bonveio-ovpn-config.conf
+
+ # Removing Default nginx page(port 80)
+ rm -rf /etc/nginx/sites-*
+
+ # Creating our root directory for all of our .ovpn configs
+ rm -rf /var/www/openvpn
+ mkdir -p /var/www/openvpn
+ wget https://raw.githubusercontent.com/GakodArmy/teli/main/index.html
+ cp index.html /var/www/openvpn
+
+ # Now creating all of our OpenVPN Configs 
+cat <<EOF152> /var/www/openvpn/tcp.ovpn
+# OpenVPN Server build v2.5.4
+# Server Location: SG, Singapore
+# Server ISP: DigitalOcean, LLC
+#
+# Experimental Config only
+# Examples demonstrated below on how to Play with OHPServer
+# Credits to kinGmapua
+
+client
+dev tun
+proto tcp
+remote $IPADDR $OpenVPN_Port1
+http-proxy $(curl -s http://ipinfo.io/ip || wget -q http://ipinfo.io/ip) $Proxy_Port
+resolv-retry infinite
+route-method exe
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+comp-lzo
+cipher AES-256-CBC
+auth SHA256
+push "redirect-gateway def1 bypass-dhcp"
+verb 3
+push-peer-info
+ping 10
+ping-restart 60
+hand-window 70
+server-poll-timeout 4
+reneg-sec 2592000
+sndbuf 0
+rcvbuf 0
+remote-cert-tls server
+key-direction 1
+<auth-user-pass>
+sam
+sam
+</auth-user-pass>
+<ca>
+$(cat /etc/openvpn/ca.crt)
+</ca>
+<cert>
+$(cat /etc/openvpn/client.crt)
+</cert>
+<key>
+$(cat /etc/openvpn/client.key)
+</key>
+<tls-auth>
+$(cat /etc/openvpn/ta.key)
+</tls-auth>
+EOF152
+
+cat <<EOF16> /var/www/openvpn/udp.ovpn
+# OpenVPN Server build v2.5.4
+# Server Location: SG, Singapore
+# Server ISP: DigitalOcean, LLC
+#
+# Experimental Config only
+# Examples demonstrated below on how to Play with OHPServer
+# Credits to kinGmapua
+
+client
+dev tun
+proto udp
+remote $IPADDR $OpenVPN_Port2
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+remote-cert-tls server
+verify-x509-name server_ADBtkp0yL46HLXPb name
+auth SHA256
+auth-nocache
+cipher AES-128-CBC
+tls-client
+tls-version-min 1.2
+tls-cipher TLS-DHE-RSA-WITH-AES-128-GCM-SHA256
+setenv opt block-outside-dns
+verb 3
+auth-user-pass
+key-direction 1
+<auth-user-pass>
+sam
+sam
+</auth-user-pass>
+<ca>
+$(cat /etc/openvpn/ca.crt)
+</ca>
+<cert>
+$(cat /etc/openvpn/client.crt)
+</cert>
+<key>
+$(cat /etc/openvpn/client.key)
+</key>
+<tls-auth>
+$(cat /etc/openvpn/tls-auth.key)
+</tls-auth>
+EOF16
+
+cat <<EOF160> /var/www/openvpn/ssl.ovpn
+# OpenVPN Server build v2.5.4
+# Server Location: SG, Singapore
+# Server ISP: DigitalOcean, LLC
+#
+# Experimental Config only
+# Examples demonstrated below on how to Play with OHPServer
+# Credits to kinGmapua
+
+client
+dev tun
+proto tcp
+remote 127.0.0.1 $OpenVPN_Port1
+route $IPADDR 255.255.255.255 net_gateway 
+resolv-retry infinite
+route-method exe
+nobind
+persist-key
+persist-tun
+comp-lzo
+cipher AES-256-CBC
+auth SHA256
+push "redirect-gateway def1 bypass-dhcp"
+verb 3
+push-peer-info
+ping 10
+ping-restart 60
+hand-window 70
+server-poll-timeout 4
+reneg-sec 2592000
+sndbuf 0
+rcvbuf 0
+remote-cert-tls server
+key-direction 1
+<auth-user-pass>
+sam
+sam
+</auth-user-pass>
+<ca>
+$(cat /etc/openvpn/ca.crt)
+</ca>
+<cert>
+$(cat /etc/openvpn/client.crt)
+</cert>
+<key>
+$(cat /etc/openvpn/client.key)
+</key>
+<tls-auth>
+$(cat /etc/openvpn/ta.key)
+</tls-auth>
+EOF160
+
+cat <<EOF17> /var/www/openvpn/ohp.ovpn
+# OpenVPN Server build v2.5.4
+# Server Location: SG, Singapore
+# Server ISP: DigitalOcean, LLC
+#
+# Experimental Config only
+# Examples demonstrated below on how to Play with OHPServer
+# Credits to kinGmapua
+
+client
+dev tun
+proto tcp
+remote devvault.digi.com.my 443
+http-proxy $IPADDR $Ohp_Port
+resolv-retry infinite
+route-method exe
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+comp-lzo
+cipher AES-256-CBC
+auth SHA256
+push "redirect-gateway def1 bypass-dhcp"
+verb 3
+push-peer-info
+ping 10
+ping-restart 60
+hand-window 70
+server-poll-timeout 4
+reneg-sec 2592000
+sndbuf 0
+rcvbuf 0
+remote-cert-tls server
+key-direction 1
+<auth-user-pass>
+sam
+sam
+</auth-user-pass>
+<ca>
+$(cat /etc/openvpn/ca.crt)
+</ca>
+<cert>
+$(cat /etc/openvpn/client.crt)
+</cert>
+<key>
+$(cat /etc/openvpn/client.key)
+</key>
+<tls-auth>
+$(cat /etc/openvpn/ta.key)
+</tls-auth>
+EOF17
+
+DISTRO=`awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }'`
+SERVER_IP=`ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p'`
+
+# Install Dependencies
+echo 'Installing Dependencies'
+DEBIAN_FRONTEND=noninteractive apt install -y resolvconf privoxy stunnel unzip iproute2 dns2tcp
+echo 'Dependencies Installed!' 
+
+# Install TunnelCat VPN Software
+echo 'Installing ohpserver'
+wget https://github.com/lfasmpao/open-http-puncher/releases/download/0.1/ohpserver-linux32.zip
+unzip ohpserver-linux32.zip
+rm ohpserver-linux32.zip
+mv ohpserver /usr/local/bin/
+chmod +x /usr/local/bin/ohpserver
+
+# Setup Privoxy
+echo 'Setting up Privoxy'
+mkdir /etc/privoxy/
+cat <<EOF > /etc/privoxy/config
+user-manual /usr/share/doc/privoxy/user-manual
+confdir /etc/privoxy
+logdir /var/log/privoxy
+actionsfile match-all.action
+actionsfile default.action
+actionsfile user.action
+filterfile default.filter
+filterfile user.filter
+logfile logfile
+listen-address  :8081
+toggle 1
+enable-remote-toggle  0
+enable-remote-http-toggle  0
+enable-edit-actions 0
+enforce-blocks 0
+buffer-limit 4096
+enable-proxy-authentication-forwarding 0
+forwarded-connect-retries  0
+accept-intercepted-requests 0
+allow-cgi-request-crunching 0
+split-large-forms 0
+keep-alive-timeout 5
+tolerate-pipelining 1
+socket-timeout 300
+EOF
+
+cat <<EOF1 > /etc/privoxy/user.action
+{ +block }
+/
+{ -block }
+*.tcat.me
+127.0.0.1
+$SERVER_IP
+EOF1
+
+# Setup ohpserver
+echo 'Setup ohpserver'
+cat <<EOF > /etc/systemd/system/ohpserver.service
+[Unit]
+Description=Daemonize OpenHTTP Puncher Server
+Wants=network.target
+After=network.target
+[Service]
+ExecStart=/usr/local/bin/ohpserver -port 8087 -proxy 127.0.0.1:8081 -tunnel $SERVER_IP:1103
+Restart=always
+RestartSec=3
+[Install]
+WantedBy=multi-user.target
+EOF
+
+echo 'Setup dns2tcp'
+cat <<EOF > /etc/dns2tcpd.conf
+listen = 0.0.0.0
+port = 53
+user = nobody
+chroot = /tmp
+pid_file = /var/run/dns2tcp.pid
+domain = $DNS_TUNNEL_DOMAIN
+resources = ovpn:$SERVER_IP:1103
+EOF
+
+# Start Services
+echo 'Running Services'
+echo "nameserver 8.8.8.8" > /etc/resolvconf/resolv.conf.d/head
+systemctl daemon-reload
+systemctl restart resolvconf
+systemctl restart stunnel4
+systemctl restart privoxy
+systemctl start ohpserver
+systemctl stop systemd-resolved
+systemctl start dns2tcp
+
+# Enable on boot
+echo 'Start services on boot'
+systemctl enable stunnel4
+systemctl enable privoxy
+systemctl enable dns2tcp
+systemctl enable ohpserver
+
+
+# Installed
+echo '' > /root/.tcat_installed
+cd
+clear
+
+ # Setting template's correct name,IP address and nginx Port
+ sed -i "s|MyScriptName|$MyScriptName|g" /var/www/openvpn/index.html
+ sed -i "s|NGINXPORT|$OvpnDownload_Port|g" /var/www/openvpn/index.html
+ sed -i "s|IP-ADDRESS|$IPADDR|g" /var/www/openvpn/index.html
+
+ # Restarting nginx service
+ systemctl restart nginx
+ 
+ # Creating all .ovpn config archives
+ cd /var/www/openvpn
+ zip -qq -r Configs.zip *.ovpn
+ cd
+}
+
+function ip_address(){
+  local IP="$( ip addr | egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | egrep -v "^192\.168|^172\.1[6-9]\.|^172\.2[0-9]\.|^172\.3[0-2]\.|^10\.|^127\.|^255\.|^0\." | head -n 1 )"
+  [ -z "${IP}" ] && IP="$( wget -qO- -t1 -T2 ipv4.icanhazip.com )"
+  [ -z "${IP}" ] && IP="$( wget -qO- -t1 -T2 ipinfo.io/ip )"
+  [ ! -z "${IP}" ] && echo "${IP}" || echo
+} 
+IPADDR="$(ip_address)"
+
+function ConfMenu(){
+echo -e " Creating Menu scripts.."
+
+cd /usr/local/sbin/
+rm -rf {accounts,base-ports,base-ports-wc,base-script,bench-network,clearcache,connections,create,create_random,create_trial,delete_expired,diagnose,edit_dropbear,edit_openssh,edit_openvpn,edit_ports,edit_squid3,edit_stunnel4,locked_list,menu,options,ram,reboot_sys,reboot_sys_auto,restart_services,server,set_multilogin_autokill,set_multilogin_autokill_lib,show_ports,speedtest,user_delete,user_details,user_details_lib,user_extend,user_list,user_lock,user_unlock}
+wget -q 'https://raw.githubusercontent.com/Vpaproject/-/main/menu.zip'
+unzip -qq menu.zip
+rm -f menu.zip
+chmod +x ./*
+dos2unix ./* &> /dev/null
+sed -i 's|/etc/squid/squid.conf|/etc/privoxy/config|g' ./*
+sed -i 's|http_port|listen-address|g' ./*
+cd ~
+
+echo 'clear' > /etc/profile.d/barts.sh
+echo 'echo '' > /var/log/syslog' >> /etc/profile.d/barts.sh
+echo 'screenfetch -p -A Android' >> /etc/profile.d/barts.sh
+chmod +x /etc/profile.d/barts.sh
+}
+
+function ScriptMessage(){
+ echo -e ""
+ echo -e ""
+ echo -e " Script created by Gakod"
+ echo -e " Edited by KinGmapua"
+}
+
+
+ # (For OpenVPN) Checking it this machine have TUN Module, this is the tunneling interface of OpenVPN server
+ if [[ ! -e /dev/net/tun ]]; then
+ echo -e "[\e[1;31mÃƒÆ’Ã¢â‚¬â€\e[0m] You cant use this script without TUN Module installed/embedded in your machine, file a support ticket to your machine admin about this matter"
+ echo -e "[\e[1;31m-\e[0m] Script is now exiting..."
+ exit 1
+fi
+
+ Installing all our wanted packages/services to be install.
+ ScriptMessage
+ sleep 2
+ InstUpdates
+ echo -e "Configuring ssh..."
+ InstSSH
+ echo -e "Configuring stunnel..."
+ InsStunnel
+ echo -e "Configuring webmin..."
+ InstWebmin
+ echo -e "Configuring OpenVPN..."
+ InsOpenVPN
+ OvpnConfigs
+ ConfStartup
+ ConfMenu
+ # Setting server local time
+ ln -fs /usr/share/zoneinfo/$MyVPS_Time /etc/localtime
+ 
+ clear
+ cd ~
+
+ # Running sysinfo 
+ bash /etc/profile.d/barts.sh
+ 
+ # Showing script's banner message
+ ScriptMessage
+ 
+ # Showing additional information from installating this script
+ echo -e ""
+ echo -e " Success Installation"
+ echo -e ""
+ echo -e " Service Ports: "
+ echo -e " OpenSSH: $SSH_Port1, $SSH_Port2"
+ echo -e " Stunnel: $Stunnel_Port1, $Stunnel_Port2"
+ echo -e " DropbearSSH: $Dropbear_Port1, $Dropbear_Port2"
+ echo -e " Privoxy: $Privoxy_Port1, $Privoxy_Port2"
+ echo -e " Squid: $Proxy_Port"
+ echo -e " OpenVPN: $OpenVPN_Port1, $OpenVPN_Port2"
+ echo -e " NGiNX: $OvpnDownload_Port"
+ echo -e " Webmin: 10000"
+ #echo -e " L2tp IPSec Key: xjvpn13"
+ echo -e ""
+ echo -e ""
+ echo -e " OpenVPN Configs Download site"
+ echo -e " http://$IPADDR:$OvpnDownload_Port"
+ echo -e ""
+ echo -e " All OpenVPN Configs Archive"
+ echo -e " http://$IPADDR:$OvpnDownload_Port/Configs.zip"
+ echo -e ""
+ echo -e ""
+ echo -e " [Note] DO NOT RESELL THIS SCRIPT"
+
+ # Clearing all logs from installation
+ rm -rf /root/.bash_history && history -c && echo '' > /var/log/syslog
+
+rm -f vpnonly*
+exit 1
