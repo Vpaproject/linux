@@ -1,0 +1,35 @@
+
+# Configure UFW
+apt-get install -y ufw
+echo "" >> /etc/ufw/before.rules
+echo "# START OPENVPN RULES" >> /etc/ufw/before.rules
+echo "# NAT table rules" >> /etc/ufw/before.rules
+echo "*nat" >> /etc/ufw/before.rules
+echo ":POSTROUTING ACCEPT [0:0]" >> /etc/ufw/before.rules
+echo "# Allow traffic from OpenVPN client to eth0" >> /etc/ufw/before.rules
+echo "-I POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE" >> /etc/ufw/before.rules
+echo "-I POSTROUTING -s 10.9.0.0/24 -o eth0 -j MASQUERADE" >> /etc/ufw/before.rules
+echo "COMMIT" >> /etc/ufw/before.rules
+echo "# END OPENVPN RULES" >> /etc/ufw/before.rules
+sed -i 's|DEFAULT_FORWARD_POLICY="DROP"|DEFAULT_FORWARD_POLICY="ACCEPT"|g' /etc/default/ufw
+sed -i "s|IPV6=yes|IPV6=no|g" /etc/default/ufw
+ufw allow 22
+ufw allow 1103
+ufw allow 77
+ufw allow 80
+ufw allow 85
+ufw allow 25222
+ufw allow 1443
+ufw allow 465
+ufw allow 8080
+ufw allow 3128
+ufw allow 8888
+ufw allow 51820
+ufw allow 442
+ufw allow 7100
+ufw allow 7200
+ufw allow 7300
+ufw allow 10000
+ufw disable
+echo "y" | ufw enable
+ufw reload
