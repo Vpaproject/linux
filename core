@@ -1,3 +1,8 @@
+<style>   
+body{
+		background-image: url("https://raw.githubusercontent.com/Vpaproject/vps/main/2.jpg");
+    background-color: #ddddddd;
+		</style>
 @charset "UTF-8";
 /**
 Dashboard UI
@@ -19003,81 +19008,6 @@ svg {
   -webkit-animation: lds-double-ring 1s linear infinite;
   animation: lds-double-ring 1s linear infinite;
 }
-#page-overlay .lds-double-ring > div:nth-child(2),
-#page-overlay .lds-double-ring > div:nth-child(4) {
-  width: 32px;
-  height: 32px;
-  top: 84px;
-  left: 84px;
-  -webkit-animation: lds-double-ring_reverse 1s linear infinite;
-  animation: lds-double-ring_reverse 1s linear infinite;
-}
-#page-overlay .lds-double-ring > div:nth-child(2) {
-  border-color: transparent #2196f3 transparent #2196f3;
-}
-#page-overlay .lds-double-ring > div:nth-child(3) {
-  border-color: transparent;
-}
-#page-overlay .lds-double-ring > div:nth-child(3) div {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-transform: rotate(45deg);
-  transform: rotate(45deg);
-}
-#page-overlay .lds-double-ring > div:nth-child(3) div:before,
-#page-overlay .lds-double-ring > div:nth-child(3) div:after {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  top: -4px;
-  left: 16px;
-  background: #2196f3;
-  border-radius: 50%;
-  box-shadow: 0 40px 0 0 #2196f3;
-}
-#page-overlay .lds-double-ring > div:nth-child(3) div:after {
-  left: -4px;
-  top: 16px;
-  box-shadow: 40px 0 0 0 #2196f3;
-}
-#page-overlay .lds-double-ring > div:nth-child(4) {
-  border-color: transparent;
-}
-#page-overlay .lds-double-ring > div:nth-child(4) div {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-transform: rotate(45deg);
-  transform: rotate(45deg);
-}
-#page-overlay .lds-double-ring > div:nth-child(4) div:before,
-#page-overlay .lds-double-ring > div:nth-child(4) div:after {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  top: -4px;
-  left: 10px;
-  background: #2196f3;
-  border-radius: 50%;
-  box-shadow: 0 28px 0 0 #2196f3;
-}
-#page-overlay .lds-double-ring > div:nth-child(4) div:after {
-  left: -4px;
-  top: 10px;
-  box-shadow: 28px 0 0 0 #2196f3;
-}
-#page-overlay .lds-double-ring {
-  width: 200px !important;
-  height: 200px !important;
-  display: inline-block;
-  -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
-  transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
-}
 
 .btn.btn-info.btn-sm{
   background-color:#ff0000 !important;
@@ -19401,12 +19331,12 @@ sr{
   height: 150px;
     width: 30px;
     position: fixed;
-    /* background: #f6ab25; */
+    /* background: #25f644; */
     z-index: 1;
     top: 0;
     margin-top: 10%;
     left: 0;
-    background-color: #f6ab25;
+    background-color: #25f644;
     overflow-x: hidden;
     border: 1px solid transparent;
     padding-top: 20px;
